@@ -1,0 +1,3 @@
+"John F.";"45" ;"Fjonveien 18"
+"Mary K.";"52";"Kvølstadbakken 11"
+"Simon P.";"23"; "Praiestakken 21A"

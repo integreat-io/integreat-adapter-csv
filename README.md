@@ -7,7 +7,7 @@ Adapter that lets
 [![Build Status](https://travis-ci.org/integreat-io/integreat-adapter-csv.svg?branch=master)](https://travis-ci.org/integreat-io/integreat-adapter-csv)
 [![Coverage Status](https://coveralls.io/repos/github/integreat-io/integreat-adapter-csv/badge.svg?branch=master)](https://coveralls.io/github/integreat-io/integreat-adapter-csv?branch=master)
 [![Dependencies Status](https://tidelift.com/badges/github/integreat-io/integreat-adapter-csv?style=flat)](https://tidelift.com/repo/github/integreat-io/integreat-adapter-csv)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6331723a6ff61de5f232/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-csv/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/55c04a2362982d593475/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-csv/maintainability)
 
 ## Getting started
 

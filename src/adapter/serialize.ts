@@ -1,3 +1,4 @@
+/// <reference path="../../integreat.d.ts" />
 import { Request } from 'integreat'
 import { EndpointOptions } from '.'
 import stringify = require('csv-stringify/lib/sync')

@@ -1,3 +1,4 @@
+/// <reference path="../../integreat.d.ts" />
 import { Response, Request } from 'integreat'
 import { EndpointOptions } from '.'
 import parse = require('csv-parse/lib/sync')

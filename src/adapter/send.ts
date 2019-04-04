@@ -1,3 +1,4 @@
+/// <reference path="../../integreat.d.ts" />
 import { Request } from 'integreat'
 import util = require('util')
 import fs = require('fs')

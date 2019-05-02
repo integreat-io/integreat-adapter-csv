@@ -1,6 +1,6 @@
 {
   "name": "integreat-adapter-csv",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CSV adapter for Integreat",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no>",
   "license": "ISC",
@@ -38,9 +38,10 @@
     ]
   },
   "nyc": {
-    "exclude": [
-      "**/*.test.js",
-      "**/*.test.ts"
+    "extension": [".ts", ".js"],
+    "include": [
+      "**/!(*.test).js",
+      "**/!(*.test|*.d).ts"
     ]
   },
   "repository": {
@@ -55,22 +56,22 @@
     "node": ">= 8.6",
     "npm": ">= 5.4"
   },
+  "dependencies": {
+    "csv-parse": "^4.4.1",
+    "csv-stringify": "^5.3.0"
+  },
   "devDependencies": {
+    "@types/node": "^11.13.8",
+    "@types/sinon": "^7.0.11",
     "ava": "^1.4.1",
     "babel-preset-env": "^1.7.0",
     "coveralls": "^3.0.3",
-    "nyc": "^13.3.0",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.15.0",
-    "tslint-config-security": "^1.15.0",
+    "nyc": "^14.1.0",
+    "sinon": "^7.3.2",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "tslint-config-security": "^1.16.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.4.1"
-  },
-  "dependencies": {
-    "@types/node": "^11.13.0",
-    "@types/sinon": "^7.0.11",
-    "csv-parse": "^4.3.4",
-    "csv-stringify": "^5.3.0",
-    "sinon": "^7.3.1"
+    "typescript": "^3.4.5"
   }
 }

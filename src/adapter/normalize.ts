@@ -16,7 +16,7 @@ const normalizeLine = (columnPrefix = 'col') => (fields: string[]) => fields.red
 const normalizeData = (data: string, options: EndpointOptions) =>
   parse(data, createOptions(options)).map(normalizeLine(options.columnPrefix))
 
-export default async function normalize (response: Response<string | null>, request: Request) {
+export default async function normalize (response: Response<string | null>, request: Request<string | null>) {
   try {
     return {
       ...response,

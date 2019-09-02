@@ -61,22 +61,22 @@
   },
   "dependencies": {
     "@types/mock-fs": "^3.6.30",
-    "csv-parse": "^4.4.1",
-    "csv-stringify": "^5.3.0",
-    "mock-fs": "^4.9.0"
+    "csv-parse": "^4.4.5",
+    "csv-stringify": "^5.3.3"
   },
   "devDependencies": {
-    "@types/node": "^12.0.0",
-    "@types/sinon": "^7.0.11",
-    "ava": "^1.4.1",
+    "@types/node": "^12.7.3",
+    "@types/sinon": "^7.0.13",
+    "ava": "^2.3.0",
     "babel-preset-env": "^1.7.0",
-    "coveralls": "^3.0.3",
-    "nyc": "^14.1.0",
-    "sinon": "^7.3.2",
-    "ts-node": "^8.1.0",
-    "tslint": "^5.16.0",
+    "coveralls": "^3.0.6",
+    "mock-fs": "^4.10.1",
+    "nyc": "^14.1.1",
+    "sinon": "^7.4.1",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.19.0",
     "tslint-config-security": "^1.16.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.6.2"
   }
 }

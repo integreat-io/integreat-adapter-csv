@@ -7,9 +7,10 @@ interface Data {
   [key: string]: string | number
 }
 
-const createOptions = ({ delimiter = ',', quoted = true }) => ({
+const createOptions = ({ delimiter = ',', quoted = true, headerRow = false }) => ({
   delimiter,
-  quoted
+  quoted,
+  header: headerRow
 })
 
 const serializeData = (data: Data[], options: EndpointOptions) =>

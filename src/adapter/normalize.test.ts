@@ -12,6 +12,11 @@ const semicolonString = `John F.;45;Fjonveien 18
 Mary K.;52;Kvølstadbakken 11
 Simon P.;23; Praiestakken 21A`
 
+const headerString = `"Name","Age","Street addr."
+"John F.","45","Fjonveien 18"
+"Mary K.","52","Kvølstadbakken 11"
+"Simon P.","23","Praiestakken 21A"`
+
 // Tests
 
 test('should normalize simple csv data', async (t) => {
@@ -72,6 +77,28 @@ test('should normalize semicolon csv data with customized column prefix', async 
     { field_1: 'John F.', field_2: '45', field_3: 'Fjonveien 18' },
     { field_1: 'Mary K.', field_2: '52', field_3: 'Kvølstadbakken 11' },
     { field_1: 'Simon P.', field_2: '23', field_3: 'Praiestakken 21A' }
+  ]
+
+  const ret = await normalize(response, request)
+
+  t.deepEqual(ret.data, expected)
+})
+
+test('should normalize semicolon csv data with header row', async (t) => {
+  const request = {
+    action: 'GET',
+    data: null,
+    endpoint: { headerRow: true }
+  }
+  const response = {
+    status: 'ok',
+    data: headerString
+
+  }
+  const expected = [
+    { Name: 'John F.', Age: '45', 'Street-addr-': 'Fjonveien 18' },
+    { Name: 'Mary K.', Age: '52', 'Street-addr-': 'Kvølstadbakken 11' },
+    { Name: 'Simon P.', Age: '23', 'Street-addr-': 'Praiestakken 21A' }
   ]
 
   const ret = await normalize(response, request)

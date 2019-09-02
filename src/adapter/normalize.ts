@@ -9,19 +9,40 @@ const createOptions = ({ delimiter = ',' }) => ({
   delimiter
 })
 
-const normalizeLine = (columnPrefix = 'col') => (fields: string[]) => fields.reduce(
-  (item, value, index) => ({ ...item, [`${columnPrefix}${ index + 1 }`]: value }), {}
-)
+const normalizeColumns = (cols: string[]) =>
+  cols.map(col => col.replace(/[\s\.]+/g, '-'))
 
-const normalizeData = (data: string, options: EndpointOptions) =>
-  parse(data, createOptions(options)).map(normalizeLine(options.columnPrefix))
+const createColumnKey = (index: number, headers: string[], prefix: string) =>
+  headers[index] || `${prefix}${ index + 1 }`
+
+const normalizeLine = (columnPrefix = 'col', headers: string[] = []) =>
+  (fields: string[]) => fields.reduce(
+    (item, value, index) => ({
+      ...item,
+      [createColumnKey(index, headers, columnPrefix)]: value
+    }), {}
+  )
+
+const readRows = (data: string, options: EndpointOptions) =>
+  parse(data, createOptions(options)) as string[][]
+
+const normalizeRows = (rows: string[][], { headerRow = false, columnPrefix }: EndpointOptions) => {
+  if (headerRow) {
+    const headers = normalizeColumns(rows[0])
+    return rows.slice(1).map(normalizeLine(columnPrefix, headers))
+  }
+
+  return rows.map(normalizeLine(columnPrefix))
+}
 
 export default async function normalize (response: Response<string | null>, request: Request<string | null>) {
+  if (!response.data) {
+    return { ...response, data: null }
+  }
+  const options = request.endpoint || {}
   try {
-    return {
-      ...response,
-      data: (response.data) ? normalizeData(response.data, request.endpoint || {}) : null
-    }
+    const rows = readRows(response.data, options)
+    return { ...response, data: normalizeRows(rows, options) }
   } catch (error) {
     throw new Error('Invalid csv format')
   }

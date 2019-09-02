@@ -49,6 +49,23 @@ test('should serialize simple data object with semicolons', async (t) => {
   t.is(ret.data, expectedData)
 })
 
+test('should include header row', async (t) => {
+  const request = {
+    action: 'SET',
+    data: [
+      { value: 1, text: 'Several words here' },
+      { value: 2, text: 'And more here' },
+      { value: 3, text: 'Even more' }
+    ],
+    endpoint: { headerRow: true }
+  }
+  const expectedData = '"value","text"\n' + commaString
+
+  const ret = await serialize(request)
+
+  t.is(ret.data, expectedData)
+})
+
 test('should return null when no data', async (t) => {
   const request = {
     action: 'SET',

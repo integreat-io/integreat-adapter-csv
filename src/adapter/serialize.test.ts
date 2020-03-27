@@ -48,6 +48,22 @@ test('should order col-fields and put them before other fields', async (t) => {
   t.is(ret.data, expectedData)
 })
 
+test('should expand arrays in place', async (t) => {
+  const request = {
+    action: 'SET',
+    data: [
+      { age: 39, col1: [1, 'Several words here'] },
+      { age: 45, col1: [2, 'And more here'] },
+      { age: 81, col1: [3, 'Even more'] }
+    ]
+  }
+  const expectedData = commaString
+
+  const ret = await serialize(request)
+
+  t.is(ret.data, expectedData)
+})
+
 test('should serialize simple data object with semicolons', async (t) => {
   const request = {
     action: 'SET',

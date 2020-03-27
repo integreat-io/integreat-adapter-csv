@@ -3,8 +3,10 @@ import { Request } from 'integreat'
 import { EndpointOptions } from '.'
 import stringify = require('csv-stringify/lib/sync')
 
+type Value = string | number | (string | number)[]
+
 interface Data {
-  [key: string]: string | number
+  [key: string]: Value
 }
 
 const createOptions = ({ delimiter = ',', quoted = true, headerRow = false }) => ({
@@ -25,9 +27,13 @@ const sortFields = ([keyA]: [string, unknown], [keyB]: [string, unknown]) => {
     ? noA - noB : Number(isNumber(noB)) - Number(isNumber(noA))
 }
 
+const expandValueArray = (key: string, value: Value) => Array.isArray(value)
+  ? value.reduce((obj, val, index) => ({ ...obj, [`${key}-${index + 1}`]: val }), {})
+  : { [key]: value }
+
 const reorderFields = (item: Data) => Object.entries(item)
   .sort(sortFields)
-  .reduce((object, [key, value]) => ({ ...object, [key]: value }), {} as Data)
+  .reduce((object, [key, value]) => ({ ...object, ...expandValueArray(key, value) }), {} as Data)
 
 const serializeData = (data: Data[], options: EndpointOptions) =>
   stringify(data.map(reorderFields), createOptions(options))

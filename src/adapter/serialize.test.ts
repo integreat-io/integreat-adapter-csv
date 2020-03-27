@@ -4,9 +4,9 @@ import serialize from './serialize'
 
 // Setup
 
-const commaString = `"1","Several words here"
-"2","And more here"
-"3","Even more"
+const commaString = `"1","Several words here","39"
+"2","And more here","45"
+"3","Even more","81"
 `
 
 const semicolonString = `1;Several words here
@@ -20,9 +20,25 @@ test('should serialize simple data object', async (t) => {
   const request = {
     action: 'SET',
     data: [
-      { value: 1, text: 'Several words here' },
-      { value: 2, text: 'And more here' },
-      { value: 3, text: 'Even more' }
+      { value: 1, text: 'Several words here', age: 39 },
+      { value: 2, text: 'And more here', age: 45 },
+      { value: 3, text: 'Even more', age: 81 }
+    ]
+  }
+  const expectedData = commaString
+
+  const ret = await serialize(request)
+
+  t.is(ret.data, expectedData)
+})
+
+test('should order col-fields and put them before other fields', async (t) => {
+  const request = {
+    action: 'SET',
+    data: [
+      { col2: 'Several words here', age: 39, col1: 1 },
+      { col2: 'And more here', age: 45, col1: 2 },
+      { col2: 'Even more', age: 81, col1: 3 }
     ]
   }
   const expectedData = commaString
@@ -53,13 +69,13 @@ test('should include header row', async (t) => {
   const request = {
     action: 'SET',
     data: [
-      { value: 1, text: 'Several words here' },
-      { value: 2, text: 'And more here' },
-      { value: 3, text: 'Even more' }
+      { value: 1, text: 'Several words here', age: 39 },
+      { value: 2, text: 'And more here', age: 45 },
+      { value: 3, text: 'Even more', age: 81 }
     ],
     endpoint: { headerRow: true }
   }
-  const expectedData = '"value","text"\n' + commaString
+  const expectedData = '"value","text","age"\n' + commaString
 
   const ret = await serialize(request)
 

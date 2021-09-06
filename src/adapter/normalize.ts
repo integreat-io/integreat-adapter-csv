@@ -6,6 +6,7 @@ import parse = require('csv-parse/lib/sync')
 const createOptions = ({ delimiter = ',' }) => ({
   skip_empty_lines: true,
   trim: true,
+  relax_column_count: true,
   delimiter
 })
 

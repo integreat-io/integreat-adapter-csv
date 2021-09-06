@@ -3,16 +3,12 @@ import { Request } from 'integreat'
 import { EndpointOptions } from '.'
 import stringify = require('csv-stringify/lib/sync')
 
-type Value = string | number | (string | number)[]
-
-interface Data {
-  [key: string]: Value
-}
-
-const createOptions = ({ delimiter = ',', quoted = true, headerRow = false }) => ({
+const createOptions = ({ delimiter = ',', quoted = true, headerRow = false }, columns: Record<string, string>) => ({
   delimiter,
   quoted,
-  header: headerRow
+  header: headerRow,
+  columns,
+  cast: { boolean: String }
 })
 
 const extractColNo = (key: string) => typeof key === 'string' && key.startsWith('col')
@@ -27,18 +23,26 @@ const sortFields = ([keyA]: [string, unknown], [keyB]: [string, unknown]) => {
     ? noA - noB : Number(isNumber(noB)) - Number(isNumber(noA))
 }
 
-const expandValueArray = (key: string, value: Value) => Array.isArray(value)
+const expandValueArray = (key: string, value: unknown) => Array.isArray(value)
   ? value.reduce((obj, val, index) => ({ ...obj, [`${key}-${index + 1}`]: val }), {})
   : { [key]: value }
 
-const reorderFields = (item: Data) => Object.entries(item)
+const reorderFields = <T = unknown>(item: Record<string, T>): Record<string, T> => Object.entries(item)
   .sort(sortFields)
-  .reduce((object, [key, value]) => ({ ...object, ...expandValueArray(key, value) }), {} as Data)
+  .reduce((object, [key, value]) => ({ ...object, ...expandValueArray(key, value) }), {})
 
-const serializeData = (data: Data[], options: EndpointOptions) =>
-  stringify(data.map(reorderFields), createOptions(options))
+const extractColumns = (rows: Record<string, unknown>[]): Record<string, string> =>
+  reorderFields(rows.reduce<Record<string, string>>(
+    (fields, row) => Object.keys(row).reduce((fields, field) => ({ ...fields, [field]: field }), fields),
+  {}))
 
-export default async function serialize (request: Request<Data[] | null>) {
+
+function serializeData (data: Record<string, unknown>[], options: EndpointOptions) {
+  const rows = data.map(reorderFields)
+  const columns = extractColumns(rows)
+  return stringify(rows, createOptions(options, columns))
+}
+export default async function serialize (request: Request<Record<string, unknown>[] | null>) {
   return {
     ...request,
     data: (request.data) ? serializeData(request.data, request.endpoint || {}) : null

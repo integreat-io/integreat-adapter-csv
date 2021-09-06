@@ -106,6 +106,30 @@ test('should normalize semicolon csv data with header row', async (t) => {
   t.deepEqual(ret.data, expected)
 })
 
+test('should normalize csv data with rows of different number of columns', async (t) => {
+  const commaString = `"John F.","45","Fjonveien 18"
+    "Mary K.","52","Kvølstadbakken 11","911 88 123","true"
+    "Simon P.","23","Praiestakken 21A","904 13 411"`
+  const request = {
+    action: 'GET',
+    data: null
+  }
+  const response = {
+    status: 'ok',
+    data: commaString
+
+  }
+  const expected = [
+    { col1: 'John F.', col2: '45', col3: 'Fjonveien 18' },
+    { col1: 'Mary K.', col2: '52', col3: 'Kvølstadbakken 11', col4: '911 88 123', col5: 'true' },
+    { col1: 'Simon P.', col2: '23', col3: 'Praiestakken 21A', col4: '904 13 411' }
+  ]
+
+  const ret = await normalize(response, request)
+
+  t.deepEqual(ret.data, expected)
+})
+
 test('should respond with null data when not a string', async (t) => {
   const request = {
     action: 'GET',
@@ -129,8 +153,7 @@ test('should throw when csv is invalid', async (t) => {
   }
   const response = {
     status: 'ok',
-    data: 'invalid,csv\nfile'
-
+    data: '"invalid","csv"\n"file","'
   }
 
   const error = await t.throwsAsync(normalize(response, request))

@@ -4,7 +4,7 @@ Adapter that lets
 [Integreat](https://github.com/integreat-io/integreat) parse and stringify CSV.
 
 [![npm Version](https://img.shields.io/npm/v/integreat-adapter-csv.svg)](https://www.npmjs.com/package/integreat-adapter-csv)
-[![Maintainability](https://api.codeclimate.com/v1/badges/55c04a2362982d593475/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-csv/maintainability)
+[![Maintainability](https://qlty.sh/badges/d0e38625-0a7d-413b-bd42-bd9c95169ccd/maintainability.svg)](https://qlty.sh/gh/integreat-io/projects/integreat-adapter-csv)
 
 ## Getting started
 

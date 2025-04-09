@@ -26,13 +26,24 @@ const setDataOnAction = (
   }),
 })
 
+/**
+ * The adapter.
+ */
 const adapter: Adapter = {
+  /**
+   * Prepare the given options. Will only remove the ones that we don't know.
+   */
   prepareOptions(options: Options, _serviceId) {
     return Object.fromEntries(
       Object.entries(options).filter(([key]) => allowedOptions.includes(key)),
     )
   },
 
+  /**
+   * Normalize (parse) the csv `data` on `payload` and/or `response` on the
+   * given `action`. A `delimiter` may be specified in the options, default is
+   * comma `,`.
+   */
   async normalize(action, options) {
     let payloadData, responseData
 
@@ -63,6 +74,13 @@ const adapter: Adapter = {
     return setDataOnAction(action, payloadData, responseData)
   },
 
+  /**
+   * Serialize (stringify) the `data` on `payload` and/or `response` on the
+   * given `action`. A `delimiter` may be specified in the options, default is
+   * comma `,`. Quotes will be used around values unless the `quoted` option is
+   * set to `false`. To include a header row, set the `headerRow` option to
+   * `true`.
+   */
   async serialize(action, options) {
     const payloadData = serializeData(action.payload.data, options)
     const responseData = serializeData(action.response?.data, options)

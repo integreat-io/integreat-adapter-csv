@@ -1,19 +1,16 @@
 # CSV adapter for Integreat
 
 Adapter that lets
-[Integreat](https://github.com/integreat-io/integreat) read and save CSV files.
+[Integreat](https://github.com/integreat-io/integreat) parse and stringify CSV.
 
 [![npm Version](https://img.shields.io/npm/v/integreat-adapter-csv.svg)](https://www.npmjs.com/package/integreat-adapter-csv)
-[![Build Status](https://travis-ci.org/integreat-io/integreat-adapter-csv.svg?branch=master)](https://travis-ci.org/integreat-io/integreat-adapter-csv)
-[![Coverage Status](https://coveralls.io/repos/github/integreat-io/integreat-adapter-csv/badge.svg?branch=master)](https://coveralls.io/github/integreat-io/integreat-adapter-csv?branch=master)
-[![Dependencies Status](https://tidelift.com/badges/github/integreat-io/integreat-adapter-csv?style=flat)](https://tidelift.com/repo/github/integreat-io/integreat-adapter-csv)
 [![Maintainability](https://api.codeclimate.com/v1/badges/55c04a2362982d593475/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-csv/maintainability)
 
 ## Getting started
 
 ### Prerequisits
 
-Requires node v8.6 and Integreat v0.7.
+Requires node v20 and Integreat v1.0.
 
 ### Installing and using
 
@@ -24,28 +21,41 @@ npm install integreat-adapter-csv
 ```
 
 Example of use:
-```javascript
-const integreat = require('integreat')
-const cvsAdapter = require('integreat-adapter-csv')
-const defs = require('./config')
 
-const resources = integreat.resources(csvAdapter)
-const great = integreat(defs, resources)
+```javascript
+import Integreat from 'integreat'
+import httpTransporter from 'integreat-transporter-http'
+import cvsAdapter from 'integreat-adapter-csv'
+import defs from './config.js'
+
+const great = Integreat.create(defs, {
+  transporters: { http: httpTransporter },
+  adapters: { csv: csvAdapter },
+})
 
 // ... and then dispatch actions as usual
 ```
 
-Example source configuration:
+Example service configuration:
 
 ```javascript
 {
   id: 'csvfile',
-  adapter: 'csv',
+  transporter: 'http',
+  adapters: ['csv'],
   endpoints: [
     { options: { delimiter: ';' } }
   ]
 }
 ```
+
+#### Available options
+
+- `delimiter`: Specify what character to use as a delimiter between fields.
+  Default is comma `,`.
+- `quoted`: When `true`, values will be surrounded by quotes. Default is `true`.
+- `headerRow`: When `true`, a header row will be included at as the first row.
+  Object keys will be used as header values. Default is `false`.
 
 ### Running the tests
 

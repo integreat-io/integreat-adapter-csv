@@ -47,6 +47,6 @@
     "@types/node": "^22.14.0",
     "@types/sinon": "^17.0.4",
     "integreat": "^1.6.1",
-    "sinon": "^20.0.0"
+    "sinon": "^21.0.0"
   }
 }

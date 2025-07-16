@@ -1,5 +1,6 @@
 import normalizeData from './utils/normalize.js'
 import serializeData from './utils/serialize.js'
+import xor from './utils/xor.js'
 import type { Transformer } from 'integreat'
 
 export interface Props {
@@ -24,9 +25,10 @@ const createOptions = ({
 const csv: Transformer = (props: Props) => () =>
   function (data, state) {
     const options = createOptions(props)
+    const rev = xor(state.rev, state.flip)
 
     try {
-      return state.rev
+      return rev
         ? (serializeData(data, options) ?? undefined)
         : (normalizeData(data, options) ?? undefined)
     } catch {

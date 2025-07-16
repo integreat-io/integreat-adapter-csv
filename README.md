@@ -70,8 +70,9 @@ Example service configuration:
 The package also includes a transformer, that works exactly like the adapter,
 except it is intended for use in mutation pipelines with
 `{ $transform: 'csv' }`. It transforms from a CSV string to an array of data
-objects when coming _from_ the service, and does the opposite goint _to_ a
-service.
+objects when coming _from_ the service, and does the opposite going _to_ a
+service. When the transform is inside a flipped mutation object (i.e.
+`$flip: true` is set), the direction of the transformer is also flipped.
 
 You may use it like this:
 

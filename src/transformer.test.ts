@@ -78,6 +78,16 @@ test('should support columnPrefix when parsing csv from service', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should stringify csv from service when flip is true', () => {
+  const stateWithFlip = { ...state, flip: true }
+  const data = csvArray
+  const expected = commaString
+
+  const ret = csv(props)(options)(data, stateWithFlip)
+
+  assert.equal(ret, expected)
+})
+
 test('should return undefined when invalid csv from service', () => {
   const data = '"invalid","csv"\n"file","'
   const expected = undefined
@@ -127,6 +137,16 @@ test('should support columnPrefix when stringifying csv to service', () => {
   const expected = commaString
 
   const ret = csv(props)(options)(data, stateRev)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should parse csv to service when flip is true', () => {
+  const stateRevWithFlip = { ...stateRev, flip: true }
+  const data = commaString
+  const expected = csvArray
+
+  const ret = csv(props)(options)(data, stateRevWithFlip)
 
   assert.deepEqual(ret, expected)
 })

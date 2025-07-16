@@ -57,6 +57,33 @@ Example service configuration:
 - `headerRow`: When `true`, a header row will be included at as the first row.
   Object keys will be used as header values. Default is `false`.
 
+### CSV transformer
+
+The package also includes a transformer, that works exactly like the adapter,
+except it is intended for use in mutation pipelines with
+`{ $transform: 'csv' }`.
+
+You may use it like this:
+
+```javascript
+import integreat from 'integreat'
+import httpTransporter from 'integreat-transporter-http'
+import csvTransformer from 'integreat-adapter-csv/transformer.js'
+import defs from './config.js'
+
+const great = Integreat.create(defs, {
+  transporters: { http: httpTransporter },
+  transformers: { csv: csvTransformer },
+})
+
+// In a mutation pipeline:
+
+const mutation = ['response.data', { $transform: 'csv', delimiter: ';' }]
+```
+
+All the options from the adapter can be used as arguments on the transform
+object.
+
 ### Running the tests
 
 The tests can be run with `npm test`.

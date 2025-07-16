@@ -3,13 +3,7 @@ import serializeData from './utils/serialize.js'
 import type { Action, Adapter } from 'integreat'
 import type { Options } from './types.js'
 
-const allowedOptions = [
-  'delimiter',
-  'quoted',
-  'columnPrefix',
-  'headerRow',
-  'fileName',
-]
+const allowedOptions = ['delimiter', 'quoted', 'columnPrefix', 'headerRow']
 
 const setDataOnAction = (
   action: Action,

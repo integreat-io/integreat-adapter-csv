@@ -64,6 +64,20 @@ test('should honor props when parsing csv from service', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should support columnPrefix when parsing csv from service', () => {
+  const props = { columnPrefix: 'field_' }
+  const data = commaString
+  const expected = [
+    { field_1: 'John F.', field_2: '45', field_3: 'Fjonveien 18' },
+    { field_1: 'Mary K.', field_2: '52', field_3: 'Kvølstadbakken 11' },
+    { field_1: 'Simon P.', field_2: '23', field_3: 'Praiestakken 21A' },
+  ]
+
+  const ret = csv(props)(options)(data, state)
+
+  assert.deepEqual(ret, expected)
+})
+
 test('should return undefined when invalid csv from service', () => {
   const data = '"invalid","csv"\n"file","'
   const expected = undefined
@@ -97,6 +111,20 @@ test('should honor props when stringifying csv to service', () => {
   const props = { delimiter: ';', quoted: false, headerRow: true }
   const data = csvArrayWithHeader
   const expected = semicolonStringWithHeader
+
+  const ret = csv(props)(options)(data, stateRev)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should support columnPrefix when stringifying csv to service', () => {
+  const props = { columnPrefix: 'field_' }
+  const data = [
+    { field_1: 'John F.', field_2: '45', field_3: 'Fjonveien 18' },
+    { field_1: 'Mary K.', field_2: '52', field_3: 'Kvølstadbakken 11' },
+    { field_1: 'Simon P.', field_2: '23', field_3: 'Praiestakken 21A' },
+  ]
+  const expected = commaString
 
   const ret = csv(props)(options)(data, stateRev)
 

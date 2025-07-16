@@ -51,17 +51,27 @@ Example service configuration:
 
 #### Available options
 
+- `columnPrefix`: By default, the keys of a data object will be the values of
+  the header row, or, if there's no header row, `col1`, `col2`, etc. To have
+  something other than `col1` etc., you may set `columnPrefix`, and it will be
+  prepended to the column number. E.g. `columnPrefix: 'Field '` will give you
+  `Field 1`, `Field 2`, etc. When there's a header row, `columnPrefix` will be
+  disregarded.
 - `delimiter`: Specify what character to use as a delimiter between fields.
   Default is comma `,`.
+- `headerRow`: If `true`, the first row will be treated as a header row when
+  parsing a CSV _from_ a service, and a header row will be inserted when
+  generating a CSV _to_ a service. In both these examples, header row values
+  will equal object keys. Default is `false`.
 - `quoted`: When `true`, values will be surrounded by quotes. Default is `true`.
-- `headerRow`: When `true`, a header row will be included at as the first row.
-  Object keys will be used as header values. Default is `false`.
 
 ### CSV transformer
 
 The package also includes a transformer, that works exactly like the adapter,
 except it is intended for use in mutation pipelines with
-`{ $transform: 'csv' }`.
+`{ $transform: 'csv' }`. It transforms from a CSV string to an array of data
+objects when coming _from_ the service, and does the opposite goint _to_ a
+service.
 
 You may use it like this:
 

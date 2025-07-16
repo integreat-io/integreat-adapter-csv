@@ -3,15 +3,22 @@ import serializeData from './utils/serialize.js'
 import type { Transformer } from 'integreat'
 
 export interface Props {
+  columnPrefix?: string
   delimiter?: string
-  quoted?: boolean
   headerRow?: boolean
+  quoted?: boolean
 }
 
-const createOptions = ({ delimiter, quoted, headerRow }: Props) => ({
+const createOptions = ({
+  columnPrefix,
   delimiter,
-  quoted,
   headerRow,
+  quoted,
+}: Props) => ({
+  columnPrefix,
+  delimiter,
+  headerRow,
+  quoted,
 })
 
 const csv: Transformer = (props: Props) => () =>

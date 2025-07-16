@@ -3,5 +3,4 @@ export interface Options extends Record<string, unknown> {
   quoted?: boolean
   columnPrefix?: string
   headerRow?: boolean
-  fileName?: string
 }

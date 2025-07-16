@@ -76,6 +76,20 @@ test('should normalize semicolon csv data with header row', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should disregard columnPrefix when there is a header row', () => {
+  const options = { headerRow: true, columnPrefix: 'field_' }
+  const data = headerString
+  const expected = [
+    { Name: 'John F.', Age: '45', 'Street-addr-': 'Fjonveien 18' },
+    { Name: 'Mary K.', Age: '52', 'Street-addr-': 'Kvølstadbakken 11' },
+    { Name: 'Simon P.', Age: '23', 'Street-addr-': 'Praiestakken 21A' },
+  ]
+
+  const ret = normalize(data, options)
+
+  assert.deepEqual(ret, expected)
+})
+
 test('should normalize csv data with rows of different number of columns', () => {
   const options = {}
   const data = `"John F.","45","Fjonveien 18"

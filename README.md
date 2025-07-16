@@ -69,12 +69,15 @@ Example service configuration:
 
 The package also includes a transformer, that works exactly like the adapter,
 except it is intended for use in mutation pipelines with
-`{ $transform: 'csv' }`. It transforms from a CSV string to an array of data
-objects when coming _from_ the service, and does the opposite going _to_ a
-service. When the transform is inside a flipped mutation object (i.e.
-`$flip: true` is set), the direction of the transformer is also flipped.
+`{ $transform: 'csv' }`.
 
-You may use it like this:
+Note that it will transform from a CSV string to an array of data objects when
+coming _from_ a service, and does the opposite going _to_ a service. When the
+transform is inside a flipped mutation object (i.e. `$flip: true` is set), the
+direction of the transformer is also flipped. You may also flip the direction
+by setting property `flip: true` on the `csv` transform object.
+
+You may use the transformer like this:
 
 ```javascript
 import integreat from 'integreat'
@@ -93,7 +96,8 @@ const mutation = ['response.data', { $transform: 'csv', delimiter: ';' }]
 ```
 
 All the options from the adapter can be used as arguments on the transform
-object.
+object. In addition, you may flip the direction of the transformer by setting
+`flip: true`.
 
 ### Running the tests
 

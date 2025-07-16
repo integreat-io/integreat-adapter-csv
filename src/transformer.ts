@@ -6,6 +6,7 @@ import type { Transformer } from 'integreat'
 export interface Props {
   columnPrefix?: string
   delimiter?: string
+  flip?: boolean
   headerRow?: boolean
   quoted?: boolean
 }
@@ -25,7 +26,7 @@ const createOptions = ({
 const csv: Transformer = (props: Props) => () =>
   function (data, state) {
     const options = createOptions(props)
-    const rev = xor(state.rev, state.flip)
+    const rev = xor(state.rev, xor(state.flip, props.flip))
 
     try {
       return rev

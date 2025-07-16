@@ -78,7 +78,17 @@ test('should support columnPrefix when parsing csv from service', () => {
   assert.deepEqual(ret, expected)
 })
 
-test('should stringify csv from service when flip is true', () => {
+test('should stringify csv from service when the flip property is true', () => {
+  const props = { flip: true }
+  const data = csvArray
+  const expected = commaString
+
+  const ret = csv(props)(options)(data, state)
+
+  assert.equal(ret, expected)
+})
+
+test('should stringify csv from service when inside a flipped mutation', () => {
   const stateWithFlip = { ...state, flip: true }
   const data = csvArray
   const expected = commaString
@@ -141,7 +151,17 @@ test('should support columnPrefix when stringifying csv to service', () => {
   assert.deepEqual(ret, expected)
 })
 
-test('should parse csv to service when flip is true', () => {
+test('should parse csv to service when the flip property is true', () => {
+  const props = { flip: true }
+  const data = commaString
+  const expected = csvArray
+
+  const ret = csv(props)(options)(data, stateRev)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should parse csv to service when inside a flipped mutation', () => {
   const stateRevWithFlip = { ...stateRev, flip: true }
   const data = commaString
   const expected = csvArray

@@ -59,11 +59,14 @@ test('should order col-fields and put them before other fields', () => {
 
 test('should expand arrays in place', () => {
   const data = [
-    { age: 39, col1: [1, 'Several words here'] },
+    { age: 39, col1: [1, 'Several words here', 'And here'] },
     { age: 45, col1: [2, 'And more here'] },
     { age: 81, col1: [3, 'Even more'] },
   ]
-  const expectedData = commaString
+  const expectedData = `"1","Several words here","And here","39"
+"2","And more here",,"45"
+"3","Even more",,"81"
+`
 
   const ret = serialize(data, options)
 

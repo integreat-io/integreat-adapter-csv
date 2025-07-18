@@ -43,8 +43,11 @@
     "node": ">= 20"
   },
   "dependencies": {
+    "@types/lodash.escape": "^4.0.9",
     "csv-parse": "^6.0.0",
-    "csv-stringify": "^6.6.0"
+    "csv-stringify": "^6.6.0",
+    "jszip": "^3.10.1",
+    "lodash.escape": "^4.0.1"
   },
   "devDependencies": {
     "@integreat/ts-dev-setup": "^8.2.0",

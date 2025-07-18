@@ -156,3 +156,20 @@ test('should serialize data in payload', async () => {
 
   assert.deepEqual(ret, expected)
 })
+
+test('should serialize data in response as Excel', async () => {
+  const optionsExcel = { ...options, useExcel: true }
+  const action = {
+    type: 'GET',
+    payload: { type: 'entry', sourceService: 'api' },
+    response: { status: 'ok', data: csvArray },
+    meta: { ident: { id: 'johnf' } },
+  }
+
+  const ret = await adapter.serialize(action, optionsExcel)
+
+  assert.equal(ret.type, 'GET')
+  assert.equal(ret.response?.status, 'ok')
+  assert.equal(typeof ret.response?.data, 'string')
+  assert.equal((ret.response.data as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel
+})

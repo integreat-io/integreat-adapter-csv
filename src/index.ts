@@ -1,9 +1,17 @@
 import normalizeData from './utils/normalize.js'
 import serializeData from './utils/serialize.js'
+import serializeExcelData from './utils/serializeExcel.js'
 import type { Action, Adapter } from 'integreat'
 import type { Options } from './types.js'
 
-const allowedOptions = ['delimiter', 'quoted', 'columnPrefix', 'headerRow']
+const allowedOptions = [
+  'delimiter',
+  'flip',
+  'columnPrefix',
+  'headerRow',
+  'quoted',
+  'useExcel',
+]
 
 const setDataOnAction = (
   action: Action,
@@ -76,8 +84,12 @@ const adapter: Adapter = {
    * `true`.
    */
   async serialize(action, options) {
-    const payloadData = serializeData(action.payload.data, options)
-    const responseData = serializeData(action.response?.data, options)
+    const payloadData = options.useExcel
+      ? await serializeExcelData(action.payload.data, options)
+      : serializeData(action.payload.data, options)
+    const responseData = options.useExcel
+      ? await serializeExcelData(action.response?.data, options)
+      : serializeData(action.response?.data, options)
 
     return setDataOnAction(action, payloadData, responseData)
   },

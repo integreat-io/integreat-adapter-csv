@@ -17,6 +17,10 @@
     "./transformer.js": {
       "import": "./dist/transformer.js",
       "types": "./dist/transformer.d.ts"
+    },
+    "./transformerExcel.js": {
+      "import": "./dist/transformerExcel.js",
+      "types": "./dist/transformerExcel.d.ts"
     }
   },
   "scripts": {

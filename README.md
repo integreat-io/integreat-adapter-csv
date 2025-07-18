@@ -69,12 +69,15 @@ Example service configuration:
   generating a CSV _to_ a service. In both these examples, header row values
   will equal object keys. Default is `false`.
 - `quoted`: When `true`, values will be surrounded by quotes. Default is `true`.
-- `useExcel`: When `true`, the adapter will expect a Base64 encoded Excel file
-  instead of a CSV string, and will output Base64 Excel files. This should be
+- `useExcel`: When `true`, the adapter will ~~expect a Base64 encoded Excel file
+  instead of a CSV string, and will~~ output Base64 Excel files. This should be
   simple Excel files that is just like CSVs in every way except the format. If
   reading an Excel file with more than one sheet, only the first one will be
   considered. When `useExcel` is true, the `delimiter` and `quoted` options are
   disregarded. Default is `false`.
+
+> [!NOTE]
+> Normalizing from Excel is not implemented yet!
 
 ### CSV transformer
 
@@ -117,19 +120,26 @@ The package also includes an Excel transformer, that works exactly like the
 adapter with the `useExcel: true` option, except it is intended for use in
 mutation pipelines with `{ $transform: 'excel' }`.
 
-Note that it will transform from a Base64 encoded Excel file to an array of data
-objects when coming _from_ a service, and does the opposite going _to_ a
-service. When the transform is inside a flipped mutation object (i.e.
-`$flip: true` is set), the direction of the transformer is also flipped. You may
-also flip the direction by setting property `flip: true` on the `excel`
-transform object.
+> [!NOTE]
+> The `excel` transformer is an async transformer.
+
+Note that it will ~~transform from a Base64 encoded Excel file to an array of
+data objects when coming _from_ a service, and~~ transform to a base64 encoded
+Excel file when going _to_ a service. When the transform is inside a flipped
+mutation object (i.e. `$flip: true` is set), the direction of the transformer is
+also flipped. You may also flip the direction by setting property `flip: true`
+on the `excel` transform object.
+
+> [!NOTE]
+> Normalizing from Excel is not implemented yet!
+
 
 You may use the transformer like this:
 
 ```javascript
 import integreat from 'integreat'
 import httpTransporter from 'integreat-transporter-http'
-import excelTransformer from 'integreat-adapter-csv/excelTransformer.js'
+import excelTransformer from 'integreat-adapter-csv/transformerExcel.js'
 import defs from './config.js'
 
 const great = Integreat.create(defs, {

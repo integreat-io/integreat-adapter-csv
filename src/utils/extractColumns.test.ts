@@ -59,6 +59,53 @@ test('should order columns by removing the prefix and order by the remaining num
   assert.deepEqual(ret, expected)
 })
 
+test('should use column headers provided with columnHeaders', () => {
+  const columnHeaders = {
+    col1: 'Name',
+    col2: 'Age',
+    col3: 'Address',
+    col4: 'Spouse',
+  }
+  const data = [
+    { col2: '45', col3: 'Fjonveien 18' },
+    { col1: 'Mary K.', col3: 'Kvølstadbakken 11' },
+    { col4: 'Simon P.', col2: 23, col3: 'Praiestakken 21A' },
+  ]
+  const expected = [
+    ['col1', 'Name'],
+    ['col2', 'Age'],
+    ['col3', 'Address'],
+    ['col4', 'Spouse'],
+  ]
+
+  const ret = extractColumns(data, undefined, columnHeaders)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should keep all columnHeaders even if they do not exist in the data', () => {
+  const columnHeaders = {
+    col1: 'Name',
+    col2: 'Age',
+    col3: 'Address',
+    col4: 'Spouse',
+  }
+  const data = [
+    { col2: '45', col3: 'Fjonveien 18' },
+    { col1: 'Mary K.', col3: 'Kvølstadbakken 11' },
+  ]
+  const expected = [
+    ['col1', 'Name'],
+    ['col2', 'Age'],
+    ['col3', 'Address'],
+    ['col4', 'Spouse'],
+  ]
+
+  const ret = extractColumns(data, undefined, columnHeaders)
+
+  assert.deepEqual(ret, expected)
+})
+
 test('should make room for array values to expand, by inserting empty columns', () => {
   const data = [
     { col1: ['John F.', 'Lucy C.'], col2: 45, col3: 'Fjonveien 18' },
@@ -73,6 +120,29 @@ test('should make room for array values to expand, by inserting empty columns', 
   ]
 
   const ret = extractColumns(data)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should make room for array values to expand when providing column headers too', () => {
+  const columnHeaders = {
+    col1: 'Name',
+    col2: 'Age',
+    col3: 'Address',
+  }
+  const data = [
+    { col1: ['John F.', 'Lucy C.'], col2: 45, col3: 'Fjonveien 18' },
+    { col1: 'Mary K.', col2: 52, col3: 'Kvølstadbakken 11' },
+    { col1: 'Simon P.', col2: 23, col3: 'Praiestakken 21A' },
+  ]
+  const expected = [
+    ['col1', 'Name'],
+    undefined,
+    ['col2', 'Age'],
+    ['col3', 'Address'],
+  ]
+
+  const ret = extractColumns(data, undefined, columnHeaders)
 
   assert.deepEqual(ret, expected)
 })

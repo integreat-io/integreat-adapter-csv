@@ -5,4 +5,5 @@ export interface Options extends Record<string, unknown> {
   columnPrefix?: string
   headerRow?: boolean
   useExcel?: boolean
+  columnHeaders?: Record<string, string>
 }

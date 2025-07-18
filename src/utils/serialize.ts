@@ -16,7 +16,11 @@ const createCsvOptions = (
 })
 
 function serializeData(data: Record<string, unknown>[], options: Options) {
-  const columns = extractColumns(data, options.columnPrefix ?? 'col')
+  const columns = extractColumns(
+    data,
+    options.columnPrefix ?? 'col',
+    options.columnHeaders,
+  )
   const rows = extractRows(data, columns)
 
   const colObjects = columns.map((col, index) =>

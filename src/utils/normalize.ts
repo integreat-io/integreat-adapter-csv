@@ -11,16 +11,36 @@ const createCsvOptions = ({ delimiter = ',' }) => ({
 const normalizeColumns = (cols: string[]) =>
   cols.map((col) => col.replace(/[\s.]+/g, '-'))
 
-const createColumnKey = (index: number, headers: string[], prefix: string) =>
-  headers[index] || `${prefix}${index + 1}` // eslint-disable-line security/detect-object-injection
+const createHeaderMapping = (columnHeaders: Record<string, string>) => {
+  const reverseMapping: Record<string, string> = {}
+  for (const [desiredKey, headerValue] of Object.entries(columnHeaders)) {
+    // eslint-disable-next-line security/detect-object-injection
+    reverseMapping[headerValue] = desiredKey
+  }
+  return reverseMapping
+}
+
+const createColumnKey = (
+  index: number,
+  headers: string[],
+  prefix: string,
+  headerMapping?: Record<string, string>,
+) => {
+  const header = headers[index] || `${prefix}${index + 1}` // eslint-disable-line security/detect-object-injection
+  return headerMapping?.[header] || header // eslint-disable-line security/detect-object-injection
+}
 
 const normalizeLine =
-  (columnPrefix = 'col', headers: string[] = []) =>
+  (
+    columnPrefix = 'col',
+    headers: string[] = [],
+    headerMapping?: Record<string, string>,
+  ) =>
   (fields: string[]) =>
     fields.reduce(
       (item, value, index) => ({
         ...item,
-        [createColumnKey(index, headers, columnPrefix)]: value,
+        [createColumnKey(index, headers, columnPrefix, headerMapping)]: value,
       }),
       {},
     )
@@ -30,11 +50,16 @@ const readRows = (data: string, options: Options) =>
 
 const normalizeRows = (
   rows: string[][],
-  { headerRow = false, columnPrefix }: Options,
+  { headerRow = false, columnPrefix, columnHeaders }: Options,
 ) => {
   if (headerRow) {
     const headers = normalizeColumns(rows[0])
-    return rows.slice(1).map(normalizeLine(columnPrefix, headers))
+    const headerMapping = columnHeaders
+      ? createHeaderMapping(columnHeaders)
+      : undefined
+    return rows
+      .slice(1)
+      .map(normalizeLine(columnPrefix, headers, headerMapping))
   }
 
   return rows.map(normalizeLine(columnPrefix))

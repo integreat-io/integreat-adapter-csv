@@ -52,6 +52,10 @@ Example service configuration:
 
 #### Available options
 
+- `columnHeaders`: An optional object with column keys as keys and column
+  headers as values. The keys should match keys in the data items, and then
+  the column headers will be used as headers instead of the keys. The default is
+  no `columnHeaders` object, and the data item keys will be used as headers.
 - `columnPrefix`: By default, the keys of a data object will be the values of
   the header row, or, if there's no header row, `col1`, `col2`, etc. To have
   something other than `col1` etc., you may set `columnPrefix`, and it will be

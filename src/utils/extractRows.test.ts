@@ -12,9 +12,9 @@ test('should extract rows from an array of objects according to the given column
     { col1: 'Simon P.', col2: 23, col3: 'Praiestakken 21A' },
   ]
   const columns: [string, string][] = [
-    ['col1', 'col1'],
-    ['col2', 'col2'],
-    ['col3', 'col3'],
+    ['col1', 'Name'],
+    ['col2', 'Age'],
+    ['col3', 'Address'],
   ]
   const expected = [
     ['John F.', 45, 'Fjonveien 18'],

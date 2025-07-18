@@ -90,6 +90,25 @@ test('should disregard columnPrefix when there is a header row', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should normalize csv data with provided columnHeaders', () => {
+  const columnHeaders = {
+    name: 'Name',
+    age: 'Age',
+    address: 'Street-addr-',
+  }
+  const options = { headerRow: true, columnHeaders }
+  const data = headerString
+  const expected = [
+    { name: 'John F.', age: '45', address: 'Fjonveien 18' },
+    { name: 'Mary K.', age: '52', address: 'Kvølstadbakken 11' },
+    { name: 'Simon P.', age: '23', address: 'Praiestakken 21A' },
+  ]
+
+  const ret = normalize(data, options)
+
+  assert.deepEqual(ret, expected)
+})
+
 test('should normalize csv data with rows of different number of columns', () => {
   const options = {}
   const data = `"John F.","45","Fjonveien 18"

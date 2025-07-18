@@ -1,52 +1,66 @@
 /**
- * Extract the columns present in an array of data items. The columns will be
- * ordered in the order they appear in the data, starting from the first item
- * and adding columns as they are encountered in the data.
- *
- * If a `prefix` is given, we will remove it from the beginning of every column
- * id, and if the resulting part of the id is a number, we will sort ascending
- * by this number.
- *
- * The result will be an array of touples with the column id and the column
- * name, which will be the same as the column id.
- *
- * The columns array will also have room for array values to expand, by leaving
- * open columns with `undefined` instead of a tupple.
+ * Helper function to update array column max length
  */
-export default function extractColumns(
+function updateArrayColumnMaxLength(
+  arrayColumnMaxLengths: Map<string, number>,
+  key: string,
+  arrayLength: number,
+): void {
+  const currentMax = arrayColumnMaxLengths.get(key) || 0
+  arrayColumnMaxLengths.set(key, Math.max(currentMax, arrayLength))
+}
+
+/**
+ * Helper function to track array column maximum lengths
+ */
+function trackArrayColumnLengths(
   data: Record<string, unknown>[],
-  prefix?: string,
-): ([string, string] | undefined)[] {
-  // Set to keep track of encountered columns in order
-  const encounteredColumns = new Set<string>()
-  // Track array columns and their maximum lengths
+  columnFilter?: (key: string) => boolean,
+): Map<string, number> {
   const arrayColumnMaxLengths = new Map<string, number>()
 
-  // Iterate through all objects to collect columns in order and track array lengths
+  for (const item of data) {
+    for (const [key, value] of Object.entries(item)) {
+      if ((!columnFilter || columnFilter(key)) && Array.isArray(value)) {
+        updateArrayColumnMaxLength(arrayColumnMaxLengths, key, value.length)
+      }
+    }
+  }
+
+  return arrayColumnMaxLengths
+}
+
+/**
+ * Helper function to analyze data and extract both columns and array max lengths in one pass
+ */
+function analyzeDataColumns(data: Record<string, unknown>[]): {
+  columns: string[]
+  arrayColumnMaxLengths: Map<string, number>
+} {
+  const encounteredColumns = new Set<string>()
+  const arrayColumnMaxLengths = new Map<string, number>()
+
   for (const item of data) {
     for (const [key, value] of Object.entries(item)) {
       encounteredColumns.add(key)
 
       if (Array.isArray(value)) {
-        const currentMax = arrayColumnMaxLengths.get(key) || 0
-        arrayColumnMaxLengths.set(key, Math.max(currentMax, value.length))
+        updateArrayColumnMaxLength(arrayColumnMaxLengths, key, value.length)
       }
     }
   }
 
-  const columns = Array.from(encounteredColumns)
-
-  // If no prefix is provided, return columns in encountered order
-  if (!prefix) {
-    return columns.flatMap((col) => [
-      [col, col] as [string, string],
-      ...Array(Math.max(0, (arrayColumnMaxLengths.get(col) || 1) - 1)).fill(
-        undefined,
-      ),
-    ])
+  return {
+    columns: Array.from(encounteredColumns),
+    arrayColumnMaxLengths,
   }
+}
 
-  // If prefix is provided, separate columns that match the prefix and have numeric suffix
+/**
+ * Helper function to order columns by prefix
+ */
+function orderColumnsByPrefix(columns: string[], prefix: string): string[] {
+  // Separate columns that match the prefix and have numeric suffix
   const numericPrefixColumns: string[] = []
   const otherColumns: string[] = []
 
@@ -74,12 +88,74 @@ export default function extractColumns(
   })
 
   // Combine sorted numeric prefix columns with other columns in original order
-  const result = [...numericPrefixColumns, ...otherColumns]
+  return [...numericPrefixColumns, ...otherColumns]
+}
 
-  return result.flatMap((col) => [
-    [col, col] as [string, string],
+/**
+ * Helper function to expand columns with array placeholders
+ */
+function expandColumnsWithArrays(
+  columns: string[],
+  arrayColumnMaxLengths: Map<string, number>,
+  getDisplayName: (col: string) => string,
+): ([string, string] | undefined)[] {
+  return columns.flatMap((col) => [
+    [col, getDisplayName(col)] as [string, string],
     ...Array(Math.max(0, (arrayColumnMaxLengths.get(col) || 1) - 1)).fill(
       undefined,
     ),
   ])
+}
+
+/**
+ * Extract the columns present in an array of data items. The columns will be
+ * ordered in the order they appear in the data, starting from the first item
+ * and adding columns as they are encountered in the data.
+ *
+ * If a `prefix` is given, we will remove it from the beginning of every column
+ * id, and if the resulting part of the id is a number, we will sort ascending
+ * by this number.
+ *
+ * The result will be an array of touples with the column id and the column
+ * name, which will be the same as the column id.
+ *
+ * The columns array will also have room for array values to expand, by leaving
+ * open columns with `undefined` instead of a tupple.
+ *
+ * If a `columnHeaders` object is provided, it will be used as a dictionary for
+ * column headers, and the order of the columns will be according to the order
+ * in the `columnHeaders` object.
+ */
+export default function extractColumns(
+  data: Record<string, unknown>[],
+  prefix?: string,
+  columnHeaders?: Record<string, string>,
+): ([string, string] | undefined)[] {
+  // 1. Get columns and max lengths
+  let columns: string[]
+  let arrayColumnMaxLengths: Map<string, number>
+
+  if (columnHeaders) {
+    columns = Object.keys(columnHeaders)
+    arrayColumnMaxLengths = trackArrayColumnLengths(
+      data,
+      (key) => key in columnHeaders,
+    )
+  } else {
+    const analysis = analyzeDataColumns(data)
+    columns = analysis.columns
+    arrayColumnMaxLengths = analysis.arrayColumnMaxLengths
+  }
+
+  // 2. Order columns if we have a prefix and don't have columnHeaders
+  if (!columnHeaders && prefix) {
+    columns = orderColumnsByPrefix(columns, prefix)
+  }
+
+  // 3. Expand and return columns array
+  const getDisplayName = columnHeaders
+    ? // eslint-disable-next-line security/detect-object-injection
+      (col: string) => columnHeaders[col]
+    : (col: string) => col
+  return expandColumnsWithArrays(columns, arrayColumnMaxLengths, getDisplayName)
 }

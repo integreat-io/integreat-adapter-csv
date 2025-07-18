@@ -101,6 +101,44 @@ test('should include header row', () => {
   assert.equal(ret, expectedData)
 })
 
+test('should include header row with a provided columnHeaders options', () => {
+  const columnHeaders = {
+    value: '#',
+    text: 'The text',
+    age: 'Age',
+  }
+  const options = { headerRow: true, columnHeaders }
+  const data = [
+    { value: 1, text: 'Several words here', age: 39 },
+    { value: 2, text: 'And more here', age: 45 },
+    { value: 3, text: 'Even more', age: 81 },
+  ]
+  const expectedData = '"#","The text","Age"\n' + commaString
+
+  const ret = serialize(data, options)
+
+  assert.equal(ret, expectedData)
+})
+
+test('should include header row with a provided columnHeaders options and data items in different order', () => {
+  const columnHeaders = {
+    value: '#',
+    text: 'The text',
+    age: 'Age',
+  }
+  const options = { headerRow: true, columnHeaders }
+  const data = [
+    { text: 'Several words here', age: 39, value: 1 },
+    { value: 2, age: 45, text: 'And more here' },
+    { age: 81, text: 'Even more', value: 3 },
+  ]
+  const expectedData = '"#","The text","Age"\n' + commaString
+
+  const ret = serialize(data, options)
+
+  assert.equal(ret, expectedData)
+})
+
 test('should serialize data objects with different number of fields', () => {
   const data = [
     { value: 1, text: 'Several words here', age: 39 },

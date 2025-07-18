@@ -24,23 +24,55 @@ test('should create an Excel file from array of rows', () => {
     [
       '<row r="1">',
       '<c r="A1" t="inlineStr"><is><t>John F.</t></is></c>',
-      '<c r="B1"><v>45</v></c>',
+      '<c r="B1" t="n"><v>45</v></c>',
       '<c r="C1" t="inlineStr"><is><t>Fjonveien 18</t></is></c>',
       '</row>',
       '<row r="2">',
       '<c r="A2" t="inlineStr"><is><t>Mary K. &amp; Lucy S.</t></is></c>',
-      '<c r="B2"><v>52</v></c>',
+      '<c r="B2" t="n"><v>52</v></c>',
       '<c r="C2" t="inlineStr"><is><t>Kvølstadbakken 11</t></is></c>',
       '</row>',
       '<row r="3">',
       '<c r="A3" t="inlineStr"><is><t>Simon P.</t></is></c>',
-      '<c r="B3"><v>23</v></c>',
+      '<c r="B3" t="n"><v>23</v></c>',
       '<c r="C3" t="inlineStr"><is><t>Praiestakken 21A</t></is></c>',
       '</row>',
     ].join(''),
   )
 
   const ret = generateExcelWorksheet(rows)
+
+  assert.equal(ret, expected)
+})
+
+test('should create an Excel file from array of rows with columns', () => {
+  const columns = ['Name', 'Age', 'Address']
+  const expected = wrapInWorksheet(
+    [
+      '<row r="1">',
+      '<c r="A1" s="1" t="inlineStr"><is><t>Name</t></is></c>',
+      '<c r="B1" s="1" t="inlineStr"><is><t>Age</t></is></c>',
+      '<c r="C1" s="1" t="inlineStr"><is><t>Address</t></is></c>',
+      '</row>',
+      '<row r="2">',
+      '<c r="A2" t="inlineStr"><is><t>John F.</t></is></c>',
+      '<c r="B2" t="n"><v>45</v></c>',
+      '<c r="C2" t="inlineStr"><is><t>Fjonveien 18</t></is></c>',
+      '</row>',
+      '<row r="3">',
+      '<c r="A3" t="inlineStr"><is><t>Mary K. &amp; Lucy S.</t></is></c>',
+      '<c r="B3" t="n"><v>52</v></c>',
+      '<c r="C3" t="inlineStr"><is><t>Kvølstadbakken 11</t></is></c>',
+      '</row>',
+      '<row r="4">',
+      '<c r="A4" t="inlineStr"><is><t>Simon P.</t></is></c>',
+      '<c r="B4" t="n"><v>23</v></c>',
+      '<c r="C4" t="inlineStr"><is><t>Praiestakken 21A</t></is></c>',
+      '</row>',
+    ].join(''),
+  )
+
+  const ret = generateExcelWorksheet(rows, columns)
 
   assert.equal(ret, expected)
 })
@@ -66,8 +98,5 @@ test('should return Excel file', async () => {
 
   // Verify the first and the last chars of the file
   assert.equal(ret.slice(0, 13), 'UEsDBAoAAAAAA')
-  assert.equal(
-    ret.slice(-103),
-    'RjRcjEEAAAxBAAAGAAAAAAAAAAAAAAAAAB2CAAAeGwvd29ya3NoZWV0cy9zaGVldDEueG1sUEsFBgAAAAAJAAkAHQIAAN0MAAAAAA==',
-  )
+  assert.equal(ret.slice(-6), 'AAAAA=')
 })

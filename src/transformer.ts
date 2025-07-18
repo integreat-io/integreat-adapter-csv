@@ -9,6 +9,7 @@ export interface Props {
   flip?: boolean
   headerRow?: boolean
   quoted?: boolean
+  columnHeaders?: Record<string, string>
 }
 
 const createOptions = ({
@@ -16,11 +17,13 @@ const createOptions = ({
   delimiter,
   headerRow,
   quoted,
+  columnHeaders,
 }: Props) => ({
   columnPrefix,
   delimiter,
   headerRow,
   quoted,
+  columnHeaders,
 })
 
 const csv: Transformer = (props: Props) => () =>

@@ -151,6 +151,18 @@ test('should support columnPrefix when stringifying csv to service', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should stringify csv to service with columnHeaders', () => {
+  const columnHeaders = { col1: 'Name', col2: 'Age', col3: 'Address' }
+  const props = { columnHeaders, headerRow: true }
+  const data = csvArray
+  const expected = `"Name","Age","Address"
+${commaString}`
+
+  const ret = csv(props)(options)(data, stateRev)
+
+  assert.equal(ret, expected)
+})
+
 test('should parse csv to service when the flip property is true', () => {
   const props = { flip: true }
   const data = commaString

@@ -48,14 +48,14 @@
   },
   "dependencies": {
     "@types/lodash.escape": "^4.0.9",
-    "csv-parse": "^6.0.0",
+    "csv-parse": "^6.1.0",
     "csv-stringify": "^6.6.0",
     "jszip": "^3.10.1",
     "lodash.escape": "^4.0.1"
   },
   "devDependencies": {
     "@integreat/ts-dev-setup": "^8.2.0",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.0.15",
     "@types/sinon": "^17.0.4",
     "integreat": "^1.6.3",
     "sinon": "^21.0.0"

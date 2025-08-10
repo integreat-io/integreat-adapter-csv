@@ -7,12 +7,12 @@ import excel from './transformerExcel.js'
 
 const props = {}
 const options = {}
-// const state = {
-//   rev: false,
-//   onlyMappedValues: false,
-//   context: [],
-//   value: {},
-// }
+const state = {
+  rev: false,
+  onlyMappedValues: false,
+  context: [],
+  value: {},
+}
 const stateRev = {
   rev: true,
   onlyMappedValues: false,
@@ -34,6 +34,26 @@ test('should stringify Excel to service', async () => {
   const data = csvArray
 
   const ret = await excel(props)(options)(data, stateRev)
+
+  assert.equal(typeof ret, 'string')
+  assert.equal((ret as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel
+})
+
+test('should stringify Excel to service even in flipped state', async () => {
+  const stateRevFlipped = { ...stateRev, flip: true }
+  const data = csvArray
+
+  const ret = await excel(props)(options)(data, stateRevFlipped)
+
+  assert.equal(typeof ret, 'string')
+  assert.equal((ret as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel
+})
+
+test('should stringify Excel to service going forward with flip prop', async () => {
+  const props = { flip: true }
+  const data = csvArray
+
+  const ret = await excel(props)(options)(data, state)
 
   assert.equal(typeof ret, 'string')
   assert.equal((ret as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel

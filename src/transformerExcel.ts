@@ -29,7 +29,7 @@ const createOptions = ({
 const csv: AsyncTransformer = (props: Props) => () =>
   async function (data, state) {
     const options = createOptions(props)
-    const rev = xor(state.rev, xor(state.flip, props.flip))
+    const rev = xor(state.rev, props.flip)
 
     try {
       return rev

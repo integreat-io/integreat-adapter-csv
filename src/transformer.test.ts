@@ -88,14 +88,14 @@ test('should stringify csv from service when the flip property is true', () => {
   assert.equal(ret, expected)
 })
 
-test('should stringify csv from service when inside a flipped mutation', () => {
+test('should still parse csv from service when inside a flipped mutation', () => {
   const stateWithFlip = { ...state, flip: true }
-  const data = csvArray
-  const expected = commaString
+  const data = commaString
+  const expected = csvArray
 
   const ret = csv(props)(options)(data, stateWithFlip)
 
-  assert.equal(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
 test('should return undefined when invalid csv from service', () => {
@@ -173,14 +173,14 @@ test('should parse csv to service when the flip property is true', () => {
   assert.deepEqual(ret, expected)
 })
 
-test('should parse csv to service when inside a flipped mutation', () => {
+test('should still stringify csv to service when inside a flipped mutation', () => {
   const stateRevWithFlip = { ...stateRev, flip: true }
-  const data = commaString
-  const expected = csvArray
+  const data = csvArray
+  const expected = commaString
 
   const ret = csv(props)(options)(data, stateRevWithFlip)
 
-  assert.deepEqual(ret, expected)
+  assert.equal(ret, expected)
 })
 
 test('should return undefined when invalid csv to service', () => {

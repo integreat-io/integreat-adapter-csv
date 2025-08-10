@@ -39,6 +39,19 @@ test('should stringify Excel to service', async () => {
   assert.equal((ret as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel
 })
 
+// Note: This doesn't really test that there are columns in the Excel sheet, it
+// only makes sure that we still return Excel. The test should be improved so
+// that we extract the actual header row from the Excel and verify it.
+test('should stringify Excel with columns', async () => {
+  const props = { headerRow: true }
+  const data = csvArray
+
+  const ret = await excel(props)(options)(data, stateRev)
+
+  assert.equal(typeof ret, 'string')
+  assert.equal((ret as string).slice(0, 13), 'UEsDBAoAAAAAA') // This indicates that we have gotten a base64 encoded Excel
+})
+
 test('should stringify Excel to service even in flipped state', async () => {
   const stateRevFlipped = { ...stateRev, flip: true }
   const data = csvArray

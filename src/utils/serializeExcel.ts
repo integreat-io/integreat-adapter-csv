@@ -6,12 +6,15 @@ import type { Options } from '../types.js'
 
 async function serializeData(
   data: Record<string, unknown>[],
-  options: Options,
+  { columnPrefix, headerRow, columnHeaders }: Options,
 ) {
-  const columns = extractColumns(data, options.columnPrefix ?? 'col')
+  const columns = extractColumns(data, columnPrefix ?? 'col', columnHeaders)
   const rows = extractRows(data, columns)
+  const headers = headerRow
+    ? columns.map((col) => (Array.isArray(col) ? col[1] : undefined))
+    : undefined
 
-  return await generateExcel(rows)
+  return await generateExcel(rows, headers)
 }
 
 export default async function serialize(data: unknown, options: Options) {
